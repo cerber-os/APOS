@@ -9,6 +9,8 @@
 #ifndef CORE_H_
 #define CORE_H_
 
+#include <stdint.h>
+
 // Constants for use with control register
 #define SET_PSP_THREAD_STACK 		(1 << 1)
 #define SET_UNPRIVILEGED_MODE		(1 << 0)
