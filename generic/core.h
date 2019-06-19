@@ -16,12 +16,12 @@
 #define SET_UNPRIVILEGED_MODE		(1 << 0)
 
 // Wrappers declarations
-static inline void 		__core_enable_irq	() 					__attribute__((always_inline));
-static inline void 		__core_disable_irq	() 					__attribute__((always_inline));
-static inline void 		__core_ISB			() 					__attribute__((always_inline));
+static inline void 		__core_enable_irq	() 			__attribute__((always_inline));
+static inline void 		__core_disable_irq	() 			__attribute__((always_inline));
+static inline void 		__core_ISB		() 			__attribute__((always_inline));
 static inline void 		__core_set_control	(uint32_t flag) 	__attribute__((always_inline));
-static inline void 		__core_set_psp		(uint32_t* addr) 	__attribute__((always_inline));
-static 		  uint32_t* __core_get_psp		() 					__attribute__((naked));
+static inline void 		__core_set_psp		(uint32_t* addr)	__attribute__((always_inline));
+static uint32_t* 		__core_get_psp		() 			__attribute__((naked));
 
 // Wrappers definitions
 
@@ -53,9 +53,9 @@ static inline void __core_set_psp(uint32_t* addr) {
 // Get current PSP register value
 static uint32_t* __core_get_psp() {
 	uint32_t res;
-	asm volatile ("MRS %0, PSP;"
-				  "MOV R0, %0;"
-				  "BX  LR;" : "=&r"(res));
+	asm volatile (	"MRS	%0,	PSP;"
+			"MOV	R0,	%0;"
+			"BX	LR;" : "=&r"(res));
 	return (uint32_t*)res;
 }
 

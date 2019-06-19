@@ -30,7 +30,7 @@ static void initThread(Thread* thread) {
 	// Build basic stack frame
 	*(--stack) = (uint32_t) 0x1000000;			// PSR
 	*(--stack) = (uint32_t) thread->entryPoint & ARM_STATE_ADDRESS_MASK;// PC
-	*(--stack) = (uint32_t) thread_exit;		// LR - function to call after thread ends
+	*(--stack) = (uint32_t) thread_exit;			// LR - function to call after thread ends
 	*(--stack) = (uint32_t) 0x0;				// R12
 	*(--stack) = (uint32_t) 0x0;				// R3
 	*(--stack) = (uint32_t) 0x0;				// R2
@@ -91,12 +91,12 @@ int createThread(Thread* thread) {
 	uint32_t reg1, reg2;
 
 	// Check if function is called from handler mode
-	asm volatile("MRS 	%0, PSP;"
-				 "MOV   %1, SP;"
-				 "TST 	%1, %0;"
-				 "ITT	EQ;"
-				 "MOVEQ R0, createThreadErrMsg;"
-				 "BEQ   kernelPanic;" : "=r"(reg1), "=r"(reg2) : : "cc");
+	asm volatile(	"MRS	%0,	PSP;"
+			"MOV	%1,	SP;"
+			"TST 	%1,	%0;"
+			"ITT	EQ;"
+			"MOVEQ 	R0, 	createThreadErrMsg;"
+			"BEQ   	kernelPanic;" : "=r"(reg1), "=r"(reg2) : : "cc");
 
 	// Check if any thread exists so far
 	if(activeThread == 0x0) {
@@ -133,3 +133,4 @@ int createThread(Thread* thread) {
 void thread_exit(void) {
 	for(;;);
 }
+

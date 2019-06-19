@@ -56,17 +56,17 @@ static inline void SVCTaskSwitch(void) {
 void SVC_Handler_Body(uint32_t r0, uint32_t r1, uint32_t r2, uint32_t r3) {
     switch(r0)    {
         case SVC_OS_START:
-        	SVCSystemStart((Thread*) r1);
-            break;
+		SVCSystemStart((Thread*) r1);
+		break;
         case SVC_TASK_SWITCH:
-        	SVCTaskSwitch();
-            break;
+		SVCTaskSwitch();
+		break;
         case SVC_CREATE_THREAD:
-        	SVCCreateThread((Thread*) r1);
-        	break;
+		SVCCreateThread((Thread*) r1);
+		break;
         default:
-        	kernelPanic("Unknown syscall requested");
-            break;
+		kernelPanic("Unknown syscall requested");
+		break;
     }
 }
 
@@ -75,23 +75,24 @@ void SVC_Handler_Body(uint32_t r0, uint32_t r1, uint32_t r2, uint32_t r3) {
 
 // Start system
 void SVC_OSStart(Thread* r0) {
-	asm volatile("MOV	R1, R0;"
-				 "MOV   R0, %0;"
-				 "SVC  0;"
-				 "BX   LR;": : "i" (SVC_OS_START));
+	asm volatile(	"MOV	R1,	R0;"
+			"MOV	R0,	%0;"
+			"SVC	0;"
+			"BX	LR;": : "i" (SVC_OS_START));
 }
 
 // Switch task
 void SVC_OSTaskSwitch(void) {
-	asm volatile("MOV  r0, %0;"
-				 "SVC  0;"
-			     "BX   LR;" : : "i" (SVC_TASK_SWITCH));
+	asm volatile(	"MOV	R0, %0;"
+			"SVC	0;"
+			"BX	LR;" : : "i" (SVC_TASK_SWITCH));
 }
 
 // Create new task
 void SVC_OSCreateThread(Thread* r0) {
-	asm volatile("MOV	R1, R0;"
-				 "MOV   R0, %0;"
-				 "SVC   0;"
-				 "BX	LR;" : : "i" (SVC_CREATE_THREAD));
+	asm volatile(	"MOV	R1,	R0;"
+			"MOV	R0,	%0;"
+			"SVC	0;"
+			"BX	LR;" : : "i" (SVC_CREATE_THREAD));
 }
+

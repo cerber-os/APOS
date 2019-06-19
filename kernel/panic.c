@@ -22,8 +22,8 @@ static inline void configureLEDGPIO(void) {
 
 // Dump registers - not implemented yet
 static inline void dumpKernelContext(void) {
-	static const char* registersNames[] = {"R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8",
-										   "R9", "R10", "R11", "R12", "SP", "LR", "PC"};
+	static const char* registersNames[] = {	"R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8",
+						"R9", "R10", "R11", "R12", "SP", "LR", "PC"};
 
 	// TODO: implement registers dumping
 	for(int i = 0; i < 16; i++)
@@ -53,7 +53,7 @@ void kernelPanic(char* reason) {
 	configureLEDGPIO();
 
 	while(1) {
-		//	Blink LED
+		// Blink LED
 		GPIO_WriteBit(KERNEL_PANIC_LED_PORT, KERNEL_PANIC_LED_PIN,
 				1 - GPIO_ReadInputDataBit(KERNEL_PANIC_LED_PORT, KERNEL_PANIC_LED_PIN) );
 		for(int i = 0; i < SystemCoreClock / 30; i++);		// Primitive delay
