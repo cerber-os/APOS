@@ -6,7 +6,8 @@
  *      Author: Paweł Wieczorek
  */
 
-#include "periphConfig.h"
+#include "../device/periphConfig.h"
+
 #include "stm32f10x.h"
 
 void ConfigRCC(void) {

@@ -9,7 +9,7 @@
 #include <stm32f10x.h>
 
 #include "../kernel/apos.h"
-#include "periphConfig.h"
+#include "device/periphConfig.h"
 
 void entry_KernelThread(void);
 void entry_Thread1(void);
