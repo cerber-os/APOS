@@ -37,6 +37,14 @@ typedef struct Thread Thread;
 // Bit masks
 #define ARM_STATE_ADDRESS_MASK	0xFFFFFFFE
 
+// Macro used to create thread structure
+#define	CREATE_THREAD_CONFIG(NAME, ENTRY, SIZE, FLAGS)	\
+							Thread NAME = { 			\
+									.entryPoint=ENTRY,	\
+									.stackSize=SIZE,	\
+									.flags=FLAGS,		\
+					}
+
 // Functions declarations
 int createThread(Thread* thread);
 
