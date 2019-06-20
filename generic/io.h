@@ -11,7 +11,7 @@
 
 #include <sys/stat.h>
 
-#define	HEAP_SIZE		200
+#define	HEAP_SIZE		1400
 
 int 		_close		(int);
 int 		_read 		(int, char*, int);

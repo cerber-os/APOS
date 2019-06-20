@@ -7,6 +7,7 @@
  */
 
 #include "thread.h"
+#include "syscall.h"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -131,6 +132,8 @@ int createThread(Thread* thread) {
 
 // Called when thread exits
 void thread_exit(void) {
+	printf("[Thread_Exit] Thread %s has exited.\n", activeThread->name);
+	SVC_OSKillThread(activeThread);
 	for(;;);
 }
 

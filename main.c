@@ -16,16 +16,15 @@ void entry_Thread1(void);
 void entry_Thread2(void);
 
 // Structures holding configuration of used threads
-CREATE_THREAD_CONFIG(Thread2, entry_Thread2, 2000, THREAD_FLAG_NORMAL);
-CREATE_THREAD_CONFIG(Thread1, entry_Thread1, 2000, THREAD_FLAG_NORMAL);
 CREATE_THREAD_CONFIG(KernelThread, entry_KernelThread, 2000, THREAD_FLAG_IS_KERNEL_THREAD);
+CREATE_THREAD_CONFIG(Thread1, entry_Thread1, 2000, THREAD_FLAG_NORMAL);
+CREATE_THREAD_CONFIG(Thread2, entry_Thread2, 2000, THREAD_FLAG_NORMAL);
 
 
 int main(void)
 {
 	__core_disable_irq();
 	ConfigRCC();
-	SysTick_Config(SystemCoreClock / 25);
 	ConfigNVIC();
 	ConfigGPIO();
 	ConfigUSART();
@@ -42,11 +41,11 @@ void entry_KernelThread(void) {
 
 	// Create Thread #1
 	SVC_OSCreateThread(&Thread1);
-	puts("Created thread #1");
+	puts("Created thread #1\0");
 
 	// Create Thread #2
 	SVC_OSCreateThread(&Thread2);
-	puts("Created thread #2");
+	puts("Created thread #2\0");
 
 	// Blink LED
 	while(1) {
@@ -67,8 +66,8 @@ void entry_Thread1(void) {
 // Entry function of thread #2
 void entry_Thread2(void) {
 	puts("Hello world from Thread 2\0");
-	while(1) {
-		GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1 - GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12) );
-		for(int i = 0; i < SystemCoreClock / 80; i++);		// Primitive delay
-	}
+	for(int i = 0; i < SystemCoreClock / 80; i++);		// Primitive delay
+
+	SVC_OSKillThread(&Thread1);				// Kill Thread1
+	return;							// return
 }

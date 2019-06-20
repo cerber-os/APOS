@@ -13,6 +13,7 @@
 void ConfigRCC(void) {
 	// Clock configuration is done by System_Init() function.
 	// We only need to configure our peripherals
+	SysTick_Config(SystemCoreClock / 25);
 
 	// Enable clock on peripherals
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);

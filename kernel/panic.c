@@ -7,9 +7,12 @@
  */
 
 #include "panic.h"
+#include "thread.h"
 #include "stm32f10x_gpio.h"
 #include "core_cm3.h"
 #include <stdio.h>
+
+extern Thread* activeThread;
 
 // Configure GPIO of LED
 static inline void configureLEDGPIO(void) {
@@ -37,6 +40,8 @@ void kernelPanic(char* reason) {
 	puts("======= Kernel panic =======\0");
 	puts("Reason:\0");
 	puts(reason);
+	puts("Active thread:\0");
+	puts(activeThread->name);
 	puts("Dump of kernel context\0");
 	dumpKernelContext();
 

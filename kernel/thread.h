@@ -21,6 +21,7 @@ struct Thread {
 	uint32_t stackSize;				// Size of stack in bytes
 	uint16_t flags;					// Flags of thread
 	uint32_t* startOfStack;				// Pointer to the base of stack
+	uint8_t* name;
 };
 typedef struct Thread Thread;
 
@@ -39,7 +40,8 @@ typedef struct Thread Thread;
 
 // Macro used to create thread structure
 #define	CREATE_THREAD_CONFIG(NAME, ENTRY, SIZE, FLAGS)	\
-				Thread NAME = { 			\
+				Thread NAME = {				\
+						.name=#NAME,		\
 						.entryPoint=ENTRY,	\
 						.stackSize=SIZE,	\
 						.flags=FLAGS,		\

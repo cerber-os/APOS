@@ -44,7 +44,7 @@ uint8_t* _sbrk(int incr)
 		heap_end = heap;
 
 	prev_heap_end = heap_end;
-	if (heap_end - heap + incr >= 200) {
+	if (heap_end - heap + incr >= HEAP_SIZE) {
 		_write(0, "Heap overflow\n", 14);
 		return (uint8_t*)-1;
 	}
