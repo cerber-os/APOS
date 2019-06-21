@@ -32,7 +32,12 @@ void SVC_Handler(void) {
 }
 
 void SysTick_Handler(void) {
-	asm volatile(	"MOV	R0,	%0;"
+	asm volatile(	"PUSH	{LR};"
+			// Handle suspend time in threads
+			"BL 	DecrementThreadsSuspendTime;"
+			"POP	{LR};"
+
+			"MOV	R0,	%0;"
 			"SVC  	0;"
 			"BX 	LR;" : : "i" (SVC_TASK_SWITCH));
 }

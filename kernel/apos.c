@@ -12,8 +12,8 @@
 uint32_t tempStack[30];
 
 void StartKernel(Thread* kernelThread) {
-	__core_set_control(SET_PSP_THREAD_STACK);
 	__core_set_psp(&tempStack[29]);
+	__core_set_control(SET_PSP_THREAD_STACK);
 	__core_ISB();
 	__core_enable_irq();
 

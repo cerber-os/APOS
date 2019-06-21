@@ -29,7 +29,7 @@ CList_t* CList_Next(CList_t* clist) {
 	return clist->next;
 }
 
-// Get previos element of list
+// Get previous element of list
 CList_t* CList_Prev(CList_t* clist) {
 	if(clist->prev == 0x0)
 		return clist;
@@ -38,9 +38,28 @@ CList_t* CList_Prev(CList_t* clist) {
 
 // Remove element from list
 void CList_Remove(CList_t* clist) {
-	if(clist->prev == clist->next)
+	if(clist->prev == clist)
 		return;		// Cannot remove the only element in list
 
 	clist->prev->next = clist->next;
 	clist->next->prev = clist->prev;
+}
+
+// Check if provided key exists in list and return pointer to it. Otherwise return null
+CList_t* CList_Find(CList_t* clist, CList_t* key) {
+	CList_t* it = clist;
+
+	if(clist == 0x0)
+		return 0x0;
+
+	do {
+		if(it == key)
+			break;
+		it = it->next;
+	} while(it != clist);
+
+	if(it == key)
+		return it;
+	else
+		return 0;
 }

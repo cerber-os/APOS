@@ -21,5 +21,6 @@ void 		CList_Add	(CList_t* clist, CList_t* new);
 CList_t* 	CList_Next	(CList_t* clist);
 CList_t* 	CList_Prev	(CList_t* clist);
 void 		CList_Remove	(CList_t* clist);
+CList_t*	CList_Find	(CList_t* clist, CList_t* key);
 
 #endif /* CLIST_H_ */

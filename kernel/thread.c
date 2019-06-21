@@ -137,3 +137,11 @@ void thread_exit(void) {
 	for(;;);
 }
 
+void DecrementThreadsSuspendTime(void) {
+	// Decrement delay in all threads
+	Thread* it = activeThread;
+	do {
+		it->sleep -= (it->sleep > 0) & 1;	// If greater than 0, decrement
+		it = (Thread*) it->list.next;
+	} while(it != activeThread);
+}

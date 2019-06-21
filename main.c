@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stm32f10x.h>
 
-#include "../kernel/apos.h"
+#include "kernel/apos.h"
 #include "device/periphConfig.h"
 
 void entry_KernelThread(void);
@@ -49,8 +49,7 @@ void entry_KernelThread(void) {
 
 	// Blink LED
 	while(1) {
-		GPIO_WriteBit(GPIOB, GPIO_Pin_10, 1 - GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10) );
-		for(int i = 0; i < SystemCoreClock / 80; i++);		// Primitive delay
+		;
 	}
 }
 
@@ -59,15 +58,15 @@ void entry_Thread1(void) {
 	puts("Hello world from Thread 1\0");
 	while(1) {
 		GPIO_WriteBit(GPIOB, GPIO_Pin_11, 1 - GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) );
-		for(int i = 0; i < SystemCoreClock / 80; i++);		// Primitive delay
+		SVC_OSSuspendThread(&Thread1, 25);
 	}
 }
 
 // Entry function of thread #2
 void entry_Thread2(void) {
 	puts("Hello world from Thread 2\0");
-	for(int i = 0; i < SystemCoreClock / 80; i++);		// Primitive delay
-
-	SVC_OSKillThread(&Thread1);				// Kill Thread1
-	return;							// return
+	while(1) {
+		GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1 - GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12) );
+		SVC_OSSuspendThread(&Thread2, 25);
+	}
 }

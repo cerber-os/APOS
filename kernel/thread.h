@@ -16,12 +16,14 @@
 struct Thread {
 	CList_t list;					// Circular list header
 
-	uint32_t* stackPtr;				// Pointer to thread stack
+	uint8_t* name;					// Name of the thread
 	void* entryPoint;				// Pointer to entry point of thread
-	uint32_t stackSize;				// Size of stack in bytes
 	uint16_t flags;					// Flags of thread
+	int32_t sleep;					// Number of SysTicks thread should be sleeping
+
 	uint32_t* startOfStack;				// Pointer to the base of stack
-	uint8_t* name;
+	uint32_t* stackPtr;				// Pointer to thread stack
+	uint32_t stackSize;				// Size of stack in bytes
 };
 typedef struct Thread Thread;
 
@@ -41,13 +43,14 @@ typedef struct Thread Thread;
 // Macro used to create thread structure
 #define	CREATE_THREAD_CONFIG(NAME, ENTRY, SIZE, FLAGS)	\
 				Thread NAME = {				\
-						.name=#NAME,		\
-						.entryPoint=ENTRY,	\
-						.stackSize=SIZE,	\
-						.flags=FLAGS,		\
+					.name=(uint8_t*)#NAME,		\
+					.entryPoint=ENTRY,		\
+					.stackSize=SIZE,		\
+					.flags=FLAGS,			\
 				}
 
 // Functions declarations
-int createThread(Thread* thread);
+int 	createThread			(Thread* thread);
+void 	DecrementThreadsSuspendTime	(void);
 
 #endif /* THREAD_H_ */
