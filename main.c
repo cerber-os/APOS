@@ -53,13 +53,21 @@ void entry_KernelThread(void) {
 	}
 }
 
+void recursiveFunc(void) {
+	SVC_OSSuspendThread(&Thread1, 1);
+	uint32_t stack;
+	asm volatile ("mov %0, sp;" : "=r"(stack));
+	printf("Cur sp: %x\n", stack);
+	if(KernelThread.stackPtr == 0x342524)		// Just to make sure GCC won't modify recursion
+		return;
+	else
+		recursiveFunc();
+}
+
 // Entry function of thread #1
 void entry_Thread1(void) {
 	puts("Hello world from Thread 1\0");
-	while(1) {
-		GPIO_WriteBit(GPIOB, GPIO_Pin_11, 1 - GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) );
-		SVC_OSSuspendThread(&Thread1, 25);
-	}
+	recursiveFunc();
 }
 
 // Entry function of thread #2

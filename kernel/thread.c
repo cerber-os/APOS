@@ -48,6 +48,9 @@ static void initThread(Thread* thread) {
 
 	// Update stack pointer
 	thread->stackPtr = stack;
+
+	// Insert canary at the end of stack area
+	SET_CANARY_AT_STACK_END(thread->startOfStack, thread->stackSize);
 }
 
 // Try to find free space for new thread stack
@@ -144,4 +147,14 @@ void DecrementThreadsSuspendTime(void) {
 		it->sleep -= (it->sleep > 0) & 1;	// If greater than 0, decrement
 		it = (Thread*) it->list.next;
 	} while(it != activeThread);
+}
+
+int verifyStackCanaries(void) {
+	Thread* it = activeThread;
+	do {
+		if(STACK_POOL_CANARY != CANARY_AT_STACK_END(it->startOfStack, it->stackSize))
+			return 1;
+		it = (Thread*) it->list.next;
+	} while(it != activeThread);
+	return 0;
 }

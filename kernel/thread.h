@@ -40,6 +40,12 @@ typedef struct Thread Thread;
 // Bit masks
 #define ARM_STATE_ADDRESS_MASK		0xFFFFFFFE
 
+// Canary used as a primitive stack overflow protection
+#define STACK_POOL_CANARY		0x6AA4DC7F
+#define SET_CANARY_AT_STACK_END(PTR, SIZE)	\
+		*(PTR - SIZE / sizeof(uint32_t)) = STACK_POOL_CANARY
+#define CANARY_AT_STACK_END(PTR, SIZE)	*(PTR - SIZE / sizeof(uint32_t))
+
 // Macro used to create thread structure
 #define	CREATE_THREAD_CONFIG(NAME, ENTRY, SIZE, FLAGS)	\
 				Thread NAME = {				\
@@ -52,5 +58,6 @@ typedef struct Thread Thread;
 // Functions declarations
 int 	createThread			(Thread* thread);
 void 	DecrementThreadsSuspendTime	(void);
+int 	verifyStackCanaries		(void);
 
 #endif /* THREAD_H_ */

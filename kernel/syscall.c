@@ -36,6 +36,9 @@ static inline void SVCTaskSwitch(void) {
 	uint32_t* pspStack = __core_get_psp();		// Get current PSP pointer
 	activeThread->stackPtr = pspStack;		// Save PSP pointer
 
+	if(verifyStackCanaries())			// Verify canaries at stack pool
+		kernelPanic("Stack overflow detected - invalid canary");
+
 	Thread* nextThread = (Thread*)activeThread->list.next;
 	while(nextThread->sleep > 0)
 		nextThread = (Thread*)nextThread->list.next;
