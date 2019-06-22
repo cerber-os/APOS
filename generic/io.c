@@ -52,3 +52,13 @@ uint8_t* _sbrk(int incr)
 	heap_end += incr;
 	return prev_heap_end;
 }
+
+
+/*************************************
+ * 	Higher level IO functions
+ *************************************/
+void _puts(const char* str) {
+	while(*str)
+		USART_SendData(USART1, *str++);
+	USART_SendData(USART1, '\n');
+}

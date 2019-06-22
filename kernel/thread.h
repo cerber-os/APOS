@@ -16,7 +16,7 @@
 struct Thread {
 	CList_t list;					// Circular list header
 
-	uint8_t* name;					// Name of the thread
+	char* name;					// Name of the thread
 	void* entryPoint;				// Pointer to entry point of thread
 	uint16_t flags;					// Flags of thread
 	int32_t sleep;					// Number of SysTicks thread should be sleeping
@@ -43,7 +43,7 @@ typedef struct Thread Thread;
 // Canary used as a primitive stack overflow protection
 #define STACK_POOL_CANARY		0x6AA4DC7F
 #define SET_CANARY_AT_STACK_END(PTR, SIZE)	\
-		*(PTR - SIZE / sizeof(uint32_t)) = STACK_POOL_CANARY
+				*(PTR - SIZE / sizeof(uint32_t)) = STACK_POOL_CANARY
 #define CANARY_AT_STACK_END(PTR, SIZE)	*(PTR - SIZE / sizeof(uint32_t))
 
 // Macro used to create thread structure

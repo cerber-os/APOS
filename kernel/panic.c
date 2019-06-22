@@ -8,11 +8,13 @@
 
 #include "panic.h"
 #include "thread.h"
-#include "stm32f10x_gpio.h"
-#include "core_cm3.h"
-#include <stdio.h>
+#include "../generic/core.h"
+#include "../generic/io.h"
 
 extern Thread* activeThread;
+
+#ifdef KERNEL_PANIC_HALT
+#include "stm32f10x_gpio.h"
 
 // Configure GPIO of LED
 static inline void configureLEDGPIO(void) {
@@ -22,6 +24,7 @@ static inline void configureLEDGPIO(void) {
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
+#endif
 
 // Dump registers - not implemented yet
 static inline void dumpKernelContext(void) {
@@ -30,28 +33,30 @@ static inline void dumpKernelContext(void) {
 
 	// TODO: implement registers dumping
 	for(int i = 0; i < 16; i++)
-		printf("\t%s: %p\n", registersNames[i], 0x0);
+		_puts(registersNames[i]);
 }
 
 // Main kernel panic function
 void kernelPanic(char* reason) {
-	__disable_fault_irq();			// Disable all interrupts
+	__core_disable_irq();			// Disable all interrupts
 
-	puts("======= Kernel panic =======\0");
-	puts("Reason:\0");
-	puts(reason);
-	puts("Active thread:\0");
-	puts(activeThread->name);
-	puts("Dump of kernel context\0");
+	_puts("======= Kernel panic =======");
+	_puts("Reason:");
+	_puts(reason);
+	_puts("Active thread:");
+	_puts(activeThread->name);
+	_puts("Dump of kernel context");
 	dumpKernelContext();
 
 #ifdef KERNEL_PANIC_HALT
-	puts("System halted...\0");
+	_puts("System halted...");
+#elif defined KERNEL_PANIC_BREAKPOINT
+	_puts("System will enter DEBUG state");
 #else
-	puts("System will now reboot\0");
+	_puts("System will now reboot");
 #endif
 
-	puts("============ END ===========\n\0");
+	_puts("============ END ===========\n");
 
 
 #ifdef KERNEL_PANIC_HALT
@@ -63,7 +68,11 @@ void kernelPanic(char* reason) {
 				1 - GPIO_ReadInputDataBit(KERNEL_PANIC_LED_PORT, KERNEL_PANIC_LED_PIN) );
 		for(int i = 0; i < SystemCoreClock / 30; i++);		// Primitive delay
 	}
+#elif defined KERNEL_PANIC_BREAKPOINT
+	__core_dbg_brk();
+	for(;;);
 #else
+	for(int i = 0; i < SystemCoreClock / 50; i++);		// Give USART time to flush Tx buffer
 	NVIC_SystemReset();
 #endif
 }

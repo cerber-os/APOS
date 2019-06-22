@@ -10,8 +10,13 @@
 #define PANIC_H_
 
 // Kernel panic configuration
-// KERNEL_PANIC_HALT:		should system be halted after panic occurred; if not defined system will be rebooted
+// 	KERNEL_PANIC_HALT:		should system be halted after panic occurred
+//	KERNEL_PANIC_RESET:		should system be restarted after panic occurred
+//	KERNEL_PANIC_BREAKPOINT:	should system enter DEBUG state after panic occurred
+
 #define KERNEL_PANIC_HALT
+//#define KERNEL_PANIC_RESET
+//#define KERNEL_PANIC_BREAKPOINT
 
 // Configuration of LED used to signalize kernel panic
 #define KERNEL_PANIC_LED_PORT	GPIOB

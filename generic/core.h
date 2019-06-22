@@ -22,6 +22,7 @@ static inline void 		__core_ISB		() 			__attribute__((always_inline));
 static inline void 		__core_set_control	(uint32_t flag) 	__attribute__((always_inline));
 static inline void 		__core_set_psp		(uint32_t* addr)	__attribute__((always_inline));
 static uint32_t* 		__core_get_psp		() 			__attribute__((naked));
+static inline void		__core_dbg_brk		()			__attribute__((always_inline));
 
 // Wrappers definitions
 
@@ -57,6 +58,11 @@ static uint32_t* __core_get_psp() {
 			"MOV	R0,	%0;"
 			"BX	LR;" : "=&r"(res));
 	return (uint32_t*)res;
+}
+
+// Enter DEBUG state
+static inline void __core_dbg_brk() {
+	asm volatile("BKPT	0;");
 }
 
 #endif /* CORE_H_ */

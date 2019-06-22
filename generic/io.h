@@ -21,4 +21,9 @@ int 		_write		(int, char*, int);
 int 		_fstat		(int, struct stat*);
 uint8_t* 	_sbrk		(int);
 
+/*************************************
+ * 	Higher level IO functions
+ *************************************/
+void 		_puts		(const char*);
+
 #endif /* IO_H_ */
